@@ -18,7 +18,9 @@ int map[4][4] = {
 };
 
 double ray2d(double angle, double x, double y) {
-	double xo = floor(x) + 1; //TODO make this equal to the nearest 16th of a unit 
+	double xpart; // Need this for a min
+	xpart = modf(x, &xpart); 
+	double xo = xpart * 16;//TODO make this equal to the nearest 16th of a unit 
 	int quadDir; // 1 Northeast, 2 Southeast, 3 Southwest, 4 Northwest	
 	double distance = 1.00;
 	if (angle >= 0 && angle <= 90) {
@@ -38,7 +40,7 @@ double ray2d(double angle, double x, double y) {
 	relAngle = quadDir * 90 - angle; //i think this finds the angle between the nearest quad
 	
 	// TODO Ray math	
-	printf("%lf\n",relAngle);
+	printf("%lf\n",relAngle); // Prints relative angle, x offset, and x coord.
 	printf("%lf\n", xo);
 	printf("%lf\n", x);
 	return distance;

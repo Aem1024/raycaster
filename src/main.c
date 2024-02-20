@@ -18,24 +18,32 @@ int map[4][4] = {
 };
 
 double ray2d(double angle) {
-	double angle	
+	int quadDir; // 1 Northeast, 2 Southeast, 3 Southwest, 4 Northwest	
 	double distance = 1.00;
 	if (angle >= 0 && angle <= 90) {
 		printf("northeast\n");
+		quadDir = 1;
 	} else if (angle >= 90 && angle <= 180) {
 		printf("southeast\n");
+		quadDir = 2;
 	} else if (angle >= 180 && angle <= 270) {
 		printf("southwest\n");
+		quadDir = 3;
 	} else if (angle >= 270) {
 		printf("northwest\n");
+		quadDir = 4;
 	}
+	double relAngle; // Angle from nearest quad counter-clockwise 
+	relAngle = quadDir * 90 - angle; //i think this finds the angle between the nearest quad
 	
-
+	
+	printf("%lf\n",relAngle);
 
 
 	return distance;
 }
 
 int main() {
+	ray2d(110);
 	return 0;
 }

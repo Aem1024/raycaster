@@ -5,7 +5,7 @@
 #define RAD_TO_DEG(X) (X * 180.0 / M_PI)
 #define DEG_TO_RAD(X) (X * M_PI / 180.0)
 
-int x,y,xo,yo; //X, Y, X offset, Y offset
+double x, y;; //X and Y coordinates
 int fov = 20; //FOV in degrees
 double viewAngle = 20; // View angle relative to straight up (0 degrees)
 int mapX, mapY;

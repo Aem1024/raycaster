@@ -2,26 +2,30 @@
 #include <stdlib.h>
 #include <math.h>
 
+#define SUBUNITS 16
+#define FOV 20
 #define RAD_TO_DEG(X) (X * 180.0 / M_PI)
 #define DEG_TO_RAD(X) (X * M_PI / 180.0)
-
+//TODO Add movement, tie to delta time
 double x, y;; //X and Y coordinates
-int fov = 20; //FOV in degrees
 double viewAngle = 20; // View angle relative to straight up (0 degrees)
 int mapX, mapY;
-int mapS = 16;
 int map[4][4] = {
 	{1,1,1,1},
 	{1,0,0,1},
 	{1,0,0,1},
 	{1,1,1,1},
 };
-
+double findSubUnit(double x) { // Find subunit of coordinate
+	double xpart, xfract;
+	xfract = modf(x, &xpart);
+	double xo = xfract * SUBUNITS;
+	xo = round(xo);
+	return xo;
+}
 double ray2d(double angle, double x, double y) {
-	double xpart; // Need this for a min
-	xpart = modf(x, &xpart); 
-	double xo = xpart * 16;//TODO make this equal to the nearest 16th of a unit 
-	int quadDir; // 1 Northeast, 2 Southeast, 3 Southwest, 4 Northwest	
+	double xo = findSubUnit(x);
+	int quadDir; // 1, NE, 2, SE, 3, SW, 4, NW
 	double distance = 1.00;
 	if (angle >= 0 && angle <= 90) {
 		printf("northeast\n");
@@ -45,8 +49,7 @@ double ray2d(double angle, double x, double y) {
 	printf("%lf\n", x);
 	return distance;
 }
-
 int main() {
-	ray2d(110, 1.10, 1.10);
+	ray2d(110, 1.5, 1.10);
 	return 0;
 }

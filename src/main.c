@@ -83,33 +83,20 @@ double ray2d(double angle, double x, double y, int map[MAPX][MAPY]) {
 			VorH = 0;
 		}
 	}
-	if (checkVert == 1 && checkHor == 1) {
-		double xPart, yPart;
-		double oLength = modf(x, &xPart);
-		double aLength = modf(y, &yPart);
-		oLength = 1 - oLength;
-		aLength = 1 - aLength;
-		distance = tan(oLength/aLength);
-	
-	}
-
 	int mapX = round(x);
 	int mapY = round(y);	
 	printf("%d\n", map[mapX][mapY]);
-	printf("%lf\n",relAngle); // Prints relative angle, x offset, and x coord.
-	printf("%lf\n", vertTri1);
-	printf("%lf\n", horTri1);
-	printf("%lf\n", hypo);
 	double xfract, yfract;
 	double adj = 1 - modf(x, &xfract);
-	double opp =  tan(DEG_TO_RAD(90 - angle)) * adj;
-	distance = pow(adj, 2) + pow(opp, 2);
-	distance = sqrt(distance);
-	return distance;
+	double opp =  tan(DEG_TO_RAD(relAngle)) * adj;
+	double Hdistance; //Distance to nearest horizontal
+	Hdistance = pow(adj, 2) + pow(opp, 2);
+	Hdistance = sqrt(Hdistance);
+	return Hdistance;
 		
 }
 int main() {
-	double distance = ray2d(110, 1.5, 1.10, map);
+	double distance = ray2d(110, 1.5, 1.1, map);
 	printf("%lf\n", distance);
 	return 0;
 }

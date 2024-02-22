@@ -12,7 +12,7 @@
 
 //TODO Add movement, tie to delta time
 double x, y;; //X and Y coordinates
-double viewAngle = 20; // View angle relative to straight up (0 degrees)
+double viewAngle = 44; // View angle relative to straight up (0 degrees)
 int map[MAPX][MAPY] = {
 	{1,1,1,1},
 	{1,0,0,1},
@@ -87,16 +87,16 @@ double ray2d(double angle, double x, double y, int map[MAPX][MAPY]) {
 	int mapY = round(y);	
 	printf("%d\n", map[mapX][mapY]);
 	double xfract, yfract;
-	double adj = 1 - modf(x, &xfract);
-	double opp =  tan(DEG_TO_RAD(relAngle)) * adj;
+	double Hadj = 1 - modf(y, &yfract);
+	double Hopp =  tan(DEG_TO_RAD(relAngle)) * Hadj;
 	double Hdistance; //Distance to nearest horizontal
-	Hdistance = pow(adj, 2) + pow(opp, 2);
+	Hdistance = pow(Hadj, 2) + pow(Hopp, 2);
 	Hdistance = sqrt(Hdistance);
 	return Hdistance;
 		
 }
 int main() {
-	double distance = ray2d(110, 1.5, 1.1, map);
+	double distance = ray2d(viewAngle, 1.5, 1.1, map);
 	printf("%lf\n", distance);
 	return 0;
 }

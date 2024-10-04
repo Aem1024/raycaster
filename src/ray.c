@@ -1,8 +1,15 @@
-#define GL_SILENCE_DEPRECATION
+
 #include <math.h>
 #include <stdio.h>
-#include <OpenGL/gl.h>
-#include <GLUT/glut.h>
+
+#ifdef __APPLE__
+    #define GL_SILENCE_DEPRECATION
+    #include <OpenGL/gl.h>
+    #include <GLUT/glut.h>
+#else
+    #include <GL/gl.h>
+    #include <GL/glut.h>
+#endif
 
 #define DEG_TO_RAD(X) (X * M_PI / 180.0)
 

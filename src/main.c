@@ -1,102 +1,99 @@
+#define GL_SILENCE_DEPRECATION
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include "ray.h"
 
-#define SUBUNITS 16
-#define FOV 20
 #define RAD_TO_DEG(X) (X * 180.0 / M_PI)
 #define DEG_TO_RAD(X) (X * M_PI / 180.0)
-#define MAPX 4
-#define MAPY 4
+
+void processNormalKeys(unsigned char key, int x, int y) {
+
+	if (key == 27)
+		exit(0);
+}
+
+void changeSize(int w, int h) {
+
+	// Prevent a divide by zero, when window is too short
+	// (you cant make a window of zero width).
+	if (h == 0)
+		h = 1;
+
+	float ratio =  w * 1.0 / h;
+
+	// Use the Projection Matrix
+	glMatrixMode(GL_PROJECTION);
+
+	// Reset Matrix
+	glLoadIdentity();
+
+	// Set the viewport to be the entire window
+	glViewport(0, 0, w, h);
+
+	// Set the correct perspective.
+	gluPerspective(45,ratio,1,100);
+
+	// Get Back to the Modelview
+	glMatrixMode(GL_MODELVIEW);
+}
 
 
-//TODO Add movement, tie to delta time
-double x, y;; //X and Y coordinates
-double viewAngle = 44; // View angle relative to straight up (0 degrees)
-int map[MAPX][MAPY] = {
-	{1,1,1,1},
-	{1,0,0,1},
-	{1,0,0,1},
-	{1,1,1,1},
+int map[4][4] = {
+    {1,1,1,1},
+    {1,0,0,1},
+    {1,0,0,1},
+    {1,1,1,1}
 };
-double findSubUnit(double x) { // Find subunit of coordinate from bottom left
-	double xpart, xfract;
-	xfract = modf(x, &xpart);
-	double xo = xfract * SUBUNITS;
-	xo = round(xo);
-	return xo;
+double posX = 1.5;
+double posY = 1.5;
+int angle = 45;
+
+
+
+void myDraw(void) {
+
+    
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    double rayY = ray(angle, posX, posY)/2;
+    double vertWidth = 0.05;
+    //drawRect(0.05, rayY, 0.1);
+    double xloc;
+    for(int i = -30; i < 31; i++) {
+        int calcAngle = angle+i;
+        xloc = (i)*vertWidth;
+        rayY = 1/ray(calcAngle, posX, posY);
+        drawRect(vertWidth, rayY, xloc);
+    }
+    
+	glEnd();
+
+	glutSwapBuffers();
 }
 
-double ray2d(double angle, double x, double y, int map[MAPX][MAPY]) {
-	double xo = findSubUnit(x);
-	int quadDir; // 1, NE, 2, SE, 3, SW, 4, NW
-	double distance = 1.00;
-	if (angle >= 0 && angle <= 90) {
-		printf("northeast\n");
-		quadDir = 1;
-	} else if (angle >= 90 && angle <= 180) {
-		printf("southeast\n");
-		quadDir = 2;
-	} else if (angle >= 180 && angle <= 270) {
-		printf("southwest\n");
-		quadDir = 3;
-	} else if (angle >= 270) {
-		printf("northwest\n");
-		quadDir = 4;
-	}
-	double relAngle; // Angle from nearest quad counter-clockwise 
-	relAngle = quadDir * 90 - angle; //i think this finds the angle between the nearest quad
-	double farClockAngle = 90 - relAngle;
-	double angle1 = 90 - relAngle;
-	int checkHor, checkVert;	
-	// TODO Ray math	
-	double horTri1, vertTri1, hypo; 
-	
-	// Find horizontal length
-	horTri1 = modf(x, &horTri1);
-	horTri1 = 1 - horTri1;	
-	
-	// Find vertical length
-	vertTri1 = modf(y, &vertTri1);
-	vertTri1 = 1 - vertTri1;
-	
-	if (angle == 90 || angle == 270) {
-		checkHor = 0;
-	}
-	if (angle == 0 || angle == 180) {
-		checkVert = 0;
-	}
-	double horOrVert; //Just to test something
-	double VorH; //check if ray passes throuh hor or vert, 1 = hor, 0 = vert
-	// Test if ray passes through horizontal or vertical first
-	horOrVert = tan(DEG_TO_RAD(angle) * horTri1);	
-	if (angle > 90 && angle < 270) {
-		if (vertTri1 <= horOrVert) {
-			int a;
-			//TODO impletment angles that go down
-		}
-	
-	} else {
-		if (vertTri1 >= horOrVert) {
-			VorH = 1;
-		} else {
-			VorH = 0;
-		}
-	}
-	int mapX = round(x);
-	int mapY = round(y);	
-	printf("%d\n", map[mapX][mapY]);
-	double xfract, yfract;
-	double Hadj = 1 - modf(y, &yfract);
-	double Hopp =  tan(DEG_TO_RAD(relAngle)) * Hadj;
-	double Hdistance; //Distance to nearest horizontal
-	Hdistance = pow(Hadj, 2) + pow(Hopp, 2);
-	Hdistance = sqrt(Hdistance);
-	return Hdistance;
-		
-}
-int main() {
-	double distance = ray2d(viewAngle, 1.5, 1.1, map);
-	printf("%lf\n", distance);
-	return 0;
+
+
+
+int main(int argc, char** argv) {
+    printf("%lf\n", ray(angle, posX, posY));
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE|GLUT_RGBA);
+    glutInitWindowPosition(100,100);
+    glutInitWindowSize(1280,500);
+    glutCreateWindow("<3");
+    
+    glutDisplayFunc(myDraw);
+    glutReshapeFunc(changeSize);
+
+
+
+    glutKeyboardFunc(processNormalKeys);
+
+    glutMainLoop();
+    
+    return 1;
 }

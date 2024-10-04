@@ -37,36 +37,75 @@ void changeSize(int w, int h) {
 }
 
 
+
 int map[4][4] = {
     {1,1,1,1},
     {1,0,0,1},
     {1,0,0,1},
     {1,1,1,1}
 };
-double posX = 1.5;
-double posY = 1.5;
-int angle = 45;
+double x = 1.5;
+double y = 1.5;
+float lx=0.0f,ly=-1.0f;
+float deltaMove = 0;
+/*
 
+
+
+
+*/
+
+float angle = 45;
+float deltaAngle = 0.0f;
 void processNormalKeys(unsigned char key, int x, int y) {
 
 	if (key == 27)
 		exit(0);
-    else if(key == 'd') {
-        angle+=1;
-    }
-    else if (key == 'a') {
-        angle-=1;
-    }
 }
 
+void pressKey(int key, int xx, int yy) {
+
+	switch (key) {
+		case 'a' : deltaAngle = -0.5; break;
+		case 'd' : deltaAngle = 0.5; break;
+		case 'w' : deltaMove = 0.05f; break;
+		case 's' : deltaMove = -0.05f; break;
+	}
+}
+
+void releaseKey(int key, int x, int y) {
+
+	switch (key) {
+		case 'a' :
+		case 'd' : deltaAngle = 0.0f;break;
+		case 'w' :
+		case 's' : deltaMove = 0; break;
+	}
+}
+void computeAngle(float deltaAngle) {
+	angle += deltaAngle;
+	lx = sin(angle);
+	ly = -cos(angle);
+}
+void computePos(float deltaMove) {
+
+	x += deltaMove * lx * 0.1f;
+	y += deltaMove * ly * 0.1f;
+}
 void myDraw(void) {
 
-    
+    if(deltaAngle) {
+    	computeAngle(deltaAngle);
+		
+    }
+	if (deltaMove) {
+		computePos(deltaMove);
+	}
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_COLOR_MATERIAL);
     // Ray height
-    double rayY = ray(angle, posX, posY)/2;
+    double rayY = ray(angle, x, y)/2;
     // Horizontal resolution of each "Bar"
     double vertWidth = 0.1;
     // Bottom left corner of our "Bar"
@@ -77,7 +116,7 @@ void myDraw(void) {
         // Our x location
         xloc = (i)*vertWidth;
         // our height is the reciprocal of our distance
-        rayY = 1/ray(calcAngle, posX, posY);
+        rayY = 1/ray(calcAngle, x, y);
         //Draw the rectangle
         drawRect(vertWidth, rayY, xloc);
     }
@@ -92,25 +131,28 @@ void myDraw(void) {
 
 int main(int argc, char** argv) {
     // Initialize GLUT
-    printf("%lf\n", ray(angle, posX, posY));
+    printf("%lf\n", ray(angle, x, y));
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(1280,500);
     glutCreateWindow("OpenGL Raycasting <3");
     
-    // Display function
-    glutDisplayFunc(myDraw);
-    glutIdleFunc(myDraw);
-    glutReshapeFunc(changeSize);
+    // register callbacks
+	glutDisplayFunc(myDraw);
+	glutReshapeFunc(changeSize);
+	glutIdleFunc(myDraw);
+	glutSpecialFunc(pressKey);
 
+	// here are the new entries
+	glutIgnoreKeyRepeat(1);
+	glutSpecialUpFunc(releaseKey);
 
-    // Check keyboard input
-    glutKeyboardFunc(processNormalKeys);
+	// OpenGL init
+	glEnable(GL_DEPTH_TEST);
 
+	// enter GLUT event processing cycle
+	glutMainLoop();
 
-    // Open main loop
-    glutMainLoop();
-    
-    return 1;
+	return 1;
 }

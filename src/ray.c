@@ -22,7 +22,7 @@ double ray(double degAngle, double posx, double posy) {
 
 void drawRect(double width, double height, double x) {
     double topY = height/2;
-    double shadeColour = topY;
+    double shadeColour = topY*0.5;
     if (topY > 1) {
         shadeColour = 1;
     }

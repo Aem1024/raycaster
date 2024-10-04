@@ -2,10 +2,11 @@
 #include <math.h>
 #include <stdio.h>
 #include <OpenGL/gl.h>
+#include <GLUT/glut.h>
 
 #define DEG_TO_RAD(X) (X * M_PI / 180.0)
 
-double ray(int degAngle, double posx, double posy) {
+double ray(double degAngle, double posx, double posy) {
     double angle = DEG_TO_RAD(degAngle);
     double AdjY = posy - floor(posy);
     double rayTestA = AdjY / cos(angle);
@@ -21,6 +22,11 @@ double ray(int degAngle, double posx, double posy) {
 
 void drawRect(double width, double height, double x) {
     double topY = height/2;
+    double shadeColour = topY;
+    if (topY > 1) {
+        shadeColour = 1;
+    }
+    glColor3f(shadeColour,shadeColour,shadeColour);
     double topX = width+x;
     glBegin(GL_TRIANGLES);
         glVertex3f(topX,topY, -5.0);

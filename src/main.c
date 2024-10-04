@@ -9,11 +9,7 @@
 #define RAD_TO_DEG(X) (X * 180.0 / M_PI)
 #define DEG_TO_RAD(X) (X * M_PI / 180.0)
 
-void processNormalKeys(unsigned char key, int x, int y) {
 
-	if (key == 27)
-		exit(0);
-}
 
 void changeSize(int w, int h) {
 
@@ -51,17 +47,28 @@ double posX = 1.5;
 double posY = 1.5;
 int angle = 45;
 
+void processNormalKeys(unsigned char key, int x, int y) {
 
+	if (key == 27)
+		exit(0);
+    else if(key == 'd') {
+        angle+=1;
+    }
+    else if (key == 'a') {
+        angle-=1;
+    }
+}
 
 void myDraw(void) {
 
     
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_COLOR_MATERIAL);
     // Ray height
     double rayY = ray(angle, posX, posY)/2;
     // Horizontal resolution of each "Bar"
-    double vertWidth = 0.05;
+    double vertWidth = 0.1;
     // Bottom left corner of our "Bar"
     double xloc;
     for(int i = -30; i < 31; i++) {
@@ -90,10 +97,11 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(1280,500);
-    glutCreateWindow("<3");
+    glutCreateWindow("OpenGL Raycasting <3");
     
     // Display function
     glutDisplayFunc(myDraw);
+    glutIdleFunc(myDraw);
     glutReshapeFunc(changeSize);
 
 

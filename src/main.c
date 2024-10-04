@@ -46,16 +46,11 @@ int map[4][4] = {
 };
 double x = 1.5;
 double y = 1.5;
-float lx=0.0f,ly=-1.0f;
 float deltaMove = 0;
-/*
+float movespeed = 0.5;
+float angle = 0;
 
 
-
-
-*/
-
-float angle = 45;
 float deltaAngle = 0.0f;
 void processNormalKeys(unsigned char key, int x, int y) {
 
@@ -68,8 +63,8 @@ void pressKey(int key, int xx, int yy) {
 	switch (key) {
 		case 'a' : deltaAngle = -0.5; break;
 		case 'd' : deltaAngle = 0.5; break;
-		case 'w' : deltaMove = 0.05f; break;
-		case 's' : deltaMove = -0.05f; break;
+		case 'w' : deltaMove = 0.01f; break;
+		case 's' : deltaMove = -0.01f; break;
 	}
 }
 
@@ -84,16 +79,19 @@ void releaseKey(int key, int x, int y) {
 }
 void computeAngle(float deltaAngle) {
 	angle += deltaAngle;
-	lx = sin(angle);
-	ly = -cos(angle);
 }
 void computePos(float deltaMove) {
 
-	x += deltaMove * lx * 0.1f;
-	y += deltaMove * ly * 0.1f;
+	float xc = -1*deltaMove*(sin(DEG_TO_RAD(angle)));
+	float yc = -1*sqrt(((deltaMove*deltaMove))-(xc*xc));
+	if (xc == 0.01f) {
+		yc = 0;
+	}
+	x+=xc;
+	y+=yc;
+	printf("X: %lf, Y: %lf    Angle: %lf\nX: %lf, Y: %lf\n\n", xc, yc, angle,x,y);
 }
 void myDraw(void) {
-
     if(deltaAngle) {
     	computeAngle(deltaAngle);
 		

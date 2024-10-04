@@ -58,15 +58,20 @@ void myDraw(void) {
     
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    // Ray height
     double rayY = ray(angle, posX, posY)/2;
+    // Horizontal resolution of each "Bar"
     double vertWidth = 0.05;
-    //drawRect(0.05, rayY, 0.1);
+    // Bottom left corner of our "Bar"
     double xloc;
     for(int i = -30; i < 31; i++) {
+        // The angle we're finding the ray from
         int calcAngle = angle+i;
+        // Our x location
         xloc = (i)*vertWidth;
+        // our height is the reciprocal of our distance
         rayY = 1/ray(calcAngle, posX, posY);
+        //Draw the rectangle
         drawRect(vertWidth, rayY, xloc);
     }
     
@@ -79,6 +84,7 @@ void myDraw(void) {
 
 
 int main(int argc, char** argv) {
+    // Initialize GLUT
     printf("%lf\n", ray(angle, posX, posY));
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGBA);
@@ -86,13 +92,16 @@ int main(int argc, char** argv) {
     glutInitWindowSize(1280,500);
     glutCreateWindow("<3");
     
+    // Display function
     glutDisplayFunc(myDraw);
     glutReshapeFunc(changeSize);
 
 
-
+    // Check keyboard input
     glutKeyboardFunc(processNormalKeys);
 
+
+    // Open main loop
     glutMainLoop();
     
     return 1;

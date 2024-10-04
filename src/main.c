@@ -2,8 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <GLUT/glut.h>
-#include <OpenGL/gl.h>
+
+#ifdef __APPLE__
+	#include <OpenGL/gl.h>
+	#include <GLUT/glut.h>
+#else
+	#include <GL/glut.h>
+	#include <GL/gl.h>
+#endif
 #include "ray.h"
 
 #define RAD_TO_DEG(X) (X * 180.0 / M_PI)

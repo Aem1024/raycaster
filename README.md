@@ -1,7 +1,3 @@
 Raycaster in C
 
-Building:
-
-Should compile with GCC
-
-`gcc main.c -lm`
+Makefile included, apple specific so you'll have to edit it for other platforms.

@@ -12,8 +12,8 @@
 #endif
 #include "ray.h"
 
-#define RAD_TO_DEG(X) (X * 180.0 / M_PI)
-#define DEG_TO_RAD(X) (X * M_PI / 180.0)
+#define RAD_TO_DEG(X) ((X) * 180.0 / M_PI)
+#define DEG_TO_RAD(X) ((X) * M_PI / 180.0)
 
 
 

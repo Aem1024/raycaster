@@ -54,7 +54,7 @@ double x = 1.5;
 double y = 1.5;
 float deltaMove = 0;
 float movespeed = 0.5;
-float angle = 0;
+float angle = 90;
 
 
 float deltaAngle = 0.0f;
@@ -85,6 +85,12 @@ void releaseKey(int key, int x, int y) {
 }
 void computeAngle(float deltaAngle) {
 	angle += deltaAngle;
+	if (angle < 0) {
+		angle = 360 + angle;
+	}
+	else if (angle > 360) {
+        angle = angle / 360;
+    }
 }
 void computePos(float deltaMove) {
 
@@ -95,9 +101,14 @@ void computePos(float deltaMove) {
 	}
 	x+=xc;
 	y+=yc;
-	printf("X: %lf, Y: %lf    Angle: %lf\nX: %lf, Y: %lf\n\n", xc, yc, angle,x,y);
+	
+	//printf("X: %lf, Y: %lf    Angle: %lf\nX: %lf, Y: %lf\n\n", xc, yc, angle,x,y);
 }
 void myDraw(void) {
+	if (isnan(y)) {
+		printf("NaN!\n");
+		y = 0;
+	}
     if(deltaAngle) {
     	computeAngle(deltaAngle);
 		
@@ -135,7 +146,6 @@ void myDraw(void) {
 
 int main(int argc, char** argv) {
     // Initialize GLUT
-    printf("%lf\n", ray(angle, x, y));
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
@@ -154,6 +164,8 @@ int main(int argc, char** argv) {
 
 	// OpenGL init
 	glEnable(GL_DEPTH_TEST);
+	printf("%lf\n",ray(30, 0.5, 0.5) );
+	printf("%lf\n\n",ray(120,0.5,0.5));
 
 	// enter GLUT event processing cycle
 	glutMainLoop();

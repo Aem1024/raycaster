@@ -54,7 +54,7 @@ double x = 1.5;
 double y = 1.5;
 float deltaMove = 0;
 float movespeed = 0.5;
-float angle = 90;
+float angle = 45;
 
 
 float deltaAngle = 0.0f;
@@ -94,20 +94,15 @@ void computeAngle(float deltaAngle) {
 }
 void computePos(float deltaMove) {
 
-	float xc = -1*deltaMove*(sin(DEG_TO_RAD(angle)));
-	float yc = -1*sqrt(((deltaMove*deltaMove))-(xc*xc));
-	if (xc == 0.01f) {
-		yc = 0;
-	}
-	x+=xc;
-	y+=yc;
-	
+	x += sin(DEG_TO_RAD(angle)) * deltaMove;
+	y -= cos(DEG_TO_RAD(angle)) * deltaMove;
+
 	//printf("X: %lf, Y: %lf    Angle: %lf\nX: %lf, Y: %lf\n\n", xc, yc, angle,x,y);
 }
 void myDraw(void) {
 	if (isnan(y)) {
 		printf("NaN!\n");
-		y = 0;
+		y = 1.5;
 	}
     if(deltaAngle) {
     	computeAngle(deltaAngle);
@@ -131,7 +126,7 @@ void myDraw(void) {
         // Our x location
         xloc = (i)*vertWidth;
         // our height is the reciprocal of our distance
-        rayY = 1/ray(calcAngle, x, y);
+        rayY = (1/ray(calcAngle, x, y))/cos(DEG_TO_RAD(calcAngle)-DEG_TO_RAD(angle));
         //Draw the rectangle
         drawRect(vertWidth, rayY, xloc);
     }
@@ -150,7 +145,7 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(1280,500);
-    glutCreateWindow("OpenGL Raycasting <3");
+    glutCreateWindow("Elli torture simulator 2020");
     
     // register callbacks
 	glutDisplayFunc(myDraw);

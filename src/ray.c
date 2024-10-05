@@ -41,13 +41,10 @@ double ray(double degAngle, double posx, double posy) {
             return posx - floor(posx);break;
 
     }
-    printf("%lf\n", angle);
     if ((angle > 0) && (angle < 90)) {
         angle = DEG_TO_RAD(angle);
         AdjY = posy - floor(posy);
         AdjX = ceil(posx) - posx;
-        printf("0-90 Y: %lf   X: %lf\n\n", AdjY, AdjX);
-        printf("Angle: %lf\n\n", angle);
         return ray2d(angle, AdjX, AdjY);
     }
     
@@ -55,8 +52,6 @@ double ray(double degAngle, double posx, double posy) {
         angle = DEG_TO_RAD(angle-90);
         AdjY = ceil(posx) - posx;
         AdjX = ceil(posy)-posy;
-        printf("90-180 Y: %lf   X: %lf\n", AdjY, AdjX);
-        printf("Angle: %lf\n\n", angle);
         return ray2d(angle, AdjX, AdjY);
     } 
 
@@ -64,8 +59,6 @@ double ray(double degAngle, double posx, double posy) {
         angle = DEG_TO_RAD(angle-180);
         AdjY = ceil(posy)-posy;
         AdjX = posx - floor(posx);
-        printf("180-270 Y: %lf   X: %lf\n\n", AdjY, AdjX);
-        printf("Angle: %lf\n\n", angle);
         return ray2d(angle, AdjX, AdjY);
     }
 
@@ -73,8 +66,6 @@ double ray(double degAngle, double posx, double posy) {
         angle = DEG_TO_RAD(angle-270);
         AdjY = posx - floor(posx);
         AdjX = posy-floor(posy);
-        printf("270-360 Y: %lf   X: %lf\n\n", AdjY, AdjX);
-        printf("Angle: %lf\n\n", angle);
         return ray2d(angle, AdjX, AdjY);
     }
     else {printf("idk\n");return 100;}
@@ -83,10 +74,7 @@ double ray(double degAngle, double posx, double posy) {
 void drawRect(double width, double height, double x) {
     double topY = height/2;
     double shadeColour = topY*0.5;
-    if (topY > 1) {
-        shadeColour = 1;
-    }
-    glColor3f(shadeColour,shadeColour,shadeColour);
+    glColor3f(shadeColour-0.1,shadeColour-0.1,shadeColour-0.1);
     double topX = width+x;
     glBegin(GL_TRIANGLES);
         glVertex3f(topX,topY, -5.0);

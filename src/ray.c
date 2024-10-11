@@ -71,7 +71,9 @@ double ray(double degAngle, double posx, double posy) {
     else {printf("idk\n");return 100;}
 }
 
-void drawRect(double width, double height, double x) {
+
+
+void drawWall(double width, double height, double x) {
     double topY = height/2;
     double shadeColour = topY*0.5;
     glColor3f(shadeColour-0.1,shadeColour-0.1,shadeColour-0.1);
@@ -84,4 +86,16 @@ void drawRect(double width, double height, double x) {
         glVertex3f(topX, topY, -5.0);
         glVertex3f(x, topY, -5.0);
         glVertex3f(x, -1*topY, -5.0);
+}
+void drawRect(double width, double height, double x, double y) {
+    double topX = width+x;
+    double topY = height+y;
+    glBegin(GL_TRIANGLES);
+        glVertex3f(topX,y, -5.0);
+        glVertex3f(x,y, -5.0);
+        glVertex3f(topX,topY, -5.0);
+    glBegin(GL_TRIANGLES);
+        glVertex3f(topX, topY, -5.0);
+        glVertex3f(x, topY, -5.0);
+        glVertex3f(x, y, -5.0);
 }

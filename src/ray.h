@@ -2,6 +2,7 @@
 #define RAY_H
 
 double ray(double degAngle, double posx, double posy);
-void drawRect(double width, double height, double x);
+void drawWall(double width, double height, double x);
+void drawRect(double width, double height, double x, double y);
 
 #endif

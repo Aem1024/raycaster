@@ -15,6 +15,8 @@
 #define RAD_TO_DEG(X) ((X) * 180.0 / M_PI)
 #define DEG_TO_RAD(X) ((X) * M_PI / 180.0)
 
+#define WIDTH 1280
+#define HEIGHT 500
 
 
 void changeSize(int w, int h) {
@@ -62,6 +64,10 @@ void processNormalKeys(unsigned char key, int x, int y) {
 
 	if (key == 27)
 		exit(0);
+	if (key == 'q') {
+	y += sin(DEG_TO_RAD(angle)) * deltaMove;
+	x -= cos(DEG_TO_RAD(angle)) * deltaMove;
+	}
 }
 
 void pressKey(int key, int xx, int yy) {
@@ -89,11 +95,10 @@ void computeAngle(float deltaAngle) {
 		angle = 360 + angle;
 	}
 	else if (angle > 360) {
-        angle = angle / 360;
+        angle = angle - 360;
     }
 }
 void computePos(float deltaMove) {
-
 	x += sin(DEG_TO_RAD(angle)) * deltaMove;
 	y -= cos(DEG_TO_RAD(angle)) * deltaMove;
 
@@ -115,12 +120,16 @@ void myDraw(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_COLOR_MATERIAL);
     // Ray height
-    double rayY = ray(angle, x, y)/2;
+    float rayY = ray(angle, x, y)/2;
     // Horizontal resolution of each "Bar"
-    double vertWidth = 0.1;
+    float vertWidth = 0.1;
     // Bottom left corner of our "Bar"
-    double xloc;
-    for(int i = -30; i < 31; i++) {
+    float xloc;
+	glColor3f(0.25,0,0.25);
+	drawRect(10, 2, -5, -2);
+	glColor3f(0.30, 0.686, 0.97);
+	drawRect(10,2,-5,0);
+    for(int i = -31; i < 31; i++) {
         // The angle we're finding the ray from
         int calcAngle = angle+i;
         // Our x location
@@ -128,7 +137,7 @@ void myDraw(void) {
         // our height is the reciprocal of our distance
         rayY = (1/ray(calcAngle, x, y))/cos(DEG_TO_RAD(calcAngle)-DEG_TO_RAD(angle));
         //Draw the rectangle
-        drawRect(vertWidth, rayY, xloc);
+        drawWall(vertWidth, rayY, xloc);
     }
     
 	glEnd();
@@ -144,7 +153,7 @@ int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(1280,500);
+    glutInitWindowSize(749,500);
     glutCreateWindow("Elli torture simulator 2020");
     
     // register callbacks
